@@ -25,9 +25,26 @@ export default function UserProfile({
   const [department, setDepartment] = useState(user.department || '');
   const [studentId, setStudentId] = useState(user.studentId || '');
   const [bio, setBio] = useState(user.bio || '');
+  const [phone, setPhone] = useState(user.phone || '');
+  const [avatarUrl, setAvatarUrl] = useState(user.avatarUrl || '');
 
   const activeRegistrations = registrations.filter(r => r.userId === user.id && r.status === 'confirmed');
   const pastEventsCount = registrations.filter(r => r.userId === user.id && r.status === 'confirmed').length; // Simplification
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 2 * 1024 * 1024) { // 2MB limit
+        onToast('error', 'File Too Large', 'Please upload an image smaller than 2MB.');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarUrl(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +58,8 @@ export default function UserProfile({
       department: department.trim(),
       studentId: studentId.trim(),
       bio: bio.trim(),
+      phone: phone.trim(),
+      avatarUrl: avatarUrl,
     });
 
     setIsEditing(false);
@@ -82,8 +101,12 @@ export default function UserProfile({
       <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 shadow-sm h-fit space-y-6">
         <div className="flex flex-col items-center text-center">
           {/* Avatar Sphere */}
-          <div className={`w-20 h-20 rounded-full ${user.avatarColor || 'bg-blue-600'} flex items-center justify-center text-white text-3xl font-bold uppercase shadow-inner`}>
-            {user.name.slice(0, 2)}
+          <div className={`relative w-24 h-24 rounded-full ${!user.avatarUrl ? (user.avatarColor || 'bg-blue-600') : 'bg-transparent'} flex items-center justify-center text-white text-3xl font-bold uppercase shadow-inner overflow-hidden border-4 border-white dark:border-slate-800`}>
+            {user.avatarUrl ? (
+              <img src={user.avatarUrl} alt="Profile" className="w-full h-full object-cover" />
+            ) : (
+              user.name.slice(0, 2)
+            )}
           </div>
 
           <h3 className="text-lg font-bold text-slate-950 dark:text-white mt-4">{user.name}</h3>
@@ -115,12 +138,15 @@ export default function UserProfile({
           {!isEditing ? (
             <div className="space-y-4">
               <div>
-                <h4 className="text-xs font-bold text-slate-400 uppercase mb-1">Affiliation</h4>
+                <h4 className="text-xs font-bold text-slate-400 uppercase mb-1">Affiliation & Contact</h4>
                 <p className="text-xs text-slate-700 dark:text-slate-300 font-medium">
                   {user.department ? `${user.department}` : 'Department not configured'}
                 </p>
                 {user.studentId && (
                   <p className="text-[10px] text-slate-400 font-mono mt-0.5">Roll ID: {user.studentId}</p>
+                )}
+                {user.phone && (
+                  <p className="text-[10px] text-slate-400 font-mono mt-0.5">Phone: {user.phone}</p>
                 )}
               </div>
 
@@ -143,6 +169,21 @@ export default function UserProfile({
           ) : (
             <form onSubmit={handleSave} className="space-y-3">
               <div>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Profile Image</label>
+                <div className="flex items-center space-x-3">
+                  <div className={`w-10 h-10 rounded-full flex-shrink-0 ${!avatarUrl ? (user.avatarColor || 'bg-blue-600') : 'bg-transparent'} flex items-center justify-center text-white text-sm font-bold uppercase overflow-hidden border border-slate-200 dark:border-slate-700`}>
+                    {avatarUrl ? <img src={avatarUrl} alt="Preview" className="w-full h-full object-cover" /> : name.slice(0, 2)}
+                  </div>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="w-full text-xs text-slate-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-md file:border-0 file:text-[10px] file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+                  />
+                </div>
+              </div>
+
+              <div>
                 <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Display Name</label>
                 <input
                   id="profile-name-edit"
@@ -151,6 +192,18 @@ export default function UserProfile({
                   onChange={(e) => setName(e.target.value)}
                   className="w-full px-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-750 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-900 dark:text-white"
                   required
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-1">Phone Number</label>
+                <input
+                  id="profile-phone-edit"
+                  type="tel"
+                  value={phone}
+                  placeholder="+1 (234) 567-8900"
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="w-full px-3 py-1.5 text-xs bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-750 rounded-md focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 text-slate-900 dark:text-white"
                 />
               </div>
 

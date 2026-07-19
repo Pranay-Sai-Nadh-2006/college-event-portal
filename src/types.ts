@@ -11,6 +11,7 @@ export interface User {
   department?: string;
   studentId?: string; // Roll number for students
   bio?: string;
+  phone?: string;
   registeredAt: string;
   lastLoginAt?: string;
 }
