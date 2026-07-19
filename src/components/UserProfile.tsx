@@ -331,7 +331,8 @@ export default function UserProfile({
                         <span>Booked On: {new Date(reg.registeredAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
                       
-                      <div className="flex items-center space-x-2.5">
+                      <div className="flex items-center gap-2 flex-wrap mt-1">
+                        {/* Share button */}
                         <button
                           onClick={() => {
                             const url = `${window.location.origin}?event=${event.id}`;
@@ -339,12 +340,13 @@ export default function UserProfile({
                             onToast('success', 'Link Copied', 'Deep link to this event has been copied to your clipboard!');
                           }}
                           title="Copy Link"
-                          className="text-slate-500 hover:text-blue-600 transition-colors flex items-center space-x-0.5 text-[10px]"
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-[10px] font-semibold text-slate-600 dark:text-slate-300 hover:bg-blue-50 dark:hover:bg-blue-950/40 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-300 transition-all"
                         >
-                          <Share2 className="h-3.5 w-3.5" />
-                          <span className="hidden sm:inline">Share</span>
+                          <Share2 className="h-3 w-3" />
+                          Share
                         </button>
 
+                        {/* Add to Calendar button */}
                         <button
                           onClick={() => {
                             const title = event.title;
@@ -386,16 +388,17 @@ export default function UserProfile({
                             onToast('success', 'Calendar Exported', 'Downloaded .ics file for your calendar!');
                           }}
                           title="Add to Calendar (.ics)"
-                          className="text-slate-500 hover:text-emerald-600 transition-colors flex items-center space-x-0.5 text-[10px]"
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-700 text-[10px] font-semibold text-slate-600 dark:text-slate-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-400 hover:border-emerald-300 transition-all"
                         >
-                          <CalendarPlus className="h-3.5 w-3.5" />
-                          <span className="hidden sm:inline">Add to Calendar</span>
+                          <CalendarPlus className="h-3 w-3" />
+                          Add to Calendar
                         </button>
 
+                        {/* Cancel Reservation button */}
                         <button
                           id={`btn-cancel-ticket-${event.id}`}
                           onClick={() => onCancelRegistration(event.id)}
-                          className="text-[10px] text-rose-500 hover:text-rose-600 font-bold underline transition-colors"
+                          className="flex items-center gap-1 px-2.5 py-1 rounded-lg border border-rose-200 dark:border-rose-900 text-[10px] font-semibold text-rose-500 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 hover:text-rose-600 hover:border-rose-400 transition-all"
                         >
                           Cancel Reservation
                         </button>
