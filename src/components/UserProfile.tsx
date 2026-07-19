@@ -76,9 +76,9 @@ export default function UserProfile({
   };
 
   // Mock a beautiful responsive QR-code SVG grid representation of the ticket!
-  const renderMockQR = (value: string) => {
+  const renderMockQR = (value: string, svgId: string) => {
     return (
-      <svg className="w-16 h-16 text-slate-800 dark:text-slate-100" viewBox="0 0 24 24" fill="currentColor">
+      <svg id={svgId} className="w-16 h-16 text-slate-800 dark:text-slate-100" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
         <rect x="0" y="0" width="6" height="6" />
         <rect x="18" y="0" width="6" height="6" />
         <rect x="0" y="18" width="6" height="6" />
@@ -92,6 +92,50 @@ export default function UserProfile({
         <rect x="22" y="22" width="2" height="2" />
       </svg>
     );
+  };
+
+  // Download the QR code as a PNG image
+  const downloadQRCode = (svgId: string, ticketValue: string, eventTitle: string) => {
+    const svgEl = document.getElementById(svgId) as SVGSVGElement | null;
+    if (!svgEl) return;
+
+    const size = 300;
+    const canvas = document.createElement('canvas');
+    canvas.width = size;
+    canvas.height = size + 60; // extra space for label
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    // White background
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Serialize SVG and draw to canvas
+    const svgData = new XMLSerializer().serializeToString(svgEl);
+    const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(svgBlob);
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, size, size);
+      URL.revokeObjectURL(url);
+
+      // Draw ticket value label below
+      ctx.fillStyle = '#1e293b';
+      ctx.font = 'bold 13px monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(ticketValue, size / 2, size + 20);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '11px sans-serif';
+      ctx.fillText(eventTitle, size / 2, size + 40);
+
+      // Trigger download
+      const link = document.createElement('a');
+      link.download = `${ticketValue}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    img.src = url;
   };
 
   return (
@@ -415,16 +459,16 @@ export default function UserProfile({
 
                   {/* Right Side: QR Code Area */}
                   <div className="p-5 bg-slate-50/40 dark:bg-slate-900/40 md:w-48 flex flex-col items-center justify-center border-t md:border-t-0 md:border-l border-slate-200 dark:border-slate-800/80 text-center space-y-2">
-                    {renderMockQR(reg.ticketQRValue)}
+                    {renderMockQR(reg.ticketQRValue, `qr-svg-${reg.id}`)}
                     <div className="text-[9px] font-mono font-semibold tracking-wider text-slate-500">{reg.ticketQRValue}</div>
                     
                     <button
                       id={`btn-print-${reg.id}`}
-                      onClick={() => onToast('info', 'Print Ticket', 'Initiating system print dialog for pass...')}
+                      onClick={() => downloadQRCode(`qr-svg-${reg.id}`, reg.ticketQRValue, event.title)}
                       className="text-[9px] font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center space-x-1"
                     >
                       <Printer className="h-3 w-3" />
-                      <span>Download PDF Pass</span>
+                      <span>Download QR Pass</span>
                     </button>
                   </div>
                 </motion.div>
