@@ -93,6 +93,7 @@ export default function App() {
 
   // 5. Global UI State
   const [theme, setTheme] = useState<'light' | 'dark' | 'neon' | 'forest' | 'sepia'>('light');
+  const [isAutoTimeTheme, setIsAutoTimeTheme] = useState(false);
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [isTicketCalendarAdded, setIsTicketCalendarAdded] = useState(false);
@@ -122,7 +123,7 @@ export default function App() {
     });
   };
 
-  // Synchronize state and sessions on mount
+  // Synchronize state and sessions on mount & across windows/tabs
   useEffect(() => {
     // Session restoration
     const savedUserId = localStorage.getItem('college_portal_user_id');
@@ -144,7 +145,48 @@ export default function App() {
     } else {
       document.documentElement.classList.remove('dark');
     }
+
+    // Real-time synchronization for newly registered users & bookings across tabs/windows
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'college_event_portal_db') {
+        setDb(getDbState());
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+
+    let channel: BroadcastChannel | null = null;
+    if ('BroadcastChannel' in window) {
+      channel = new BroadcastChannel('college_event_portal_sync');
+      channel.onmessage = () => {
+        setDb(getDbState());
+      };
+    }
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      if (channel) channel.close();
+    };
   }, []);
+
+  // Time of Day Auto-Theme shift logic
+  useEffect(() => {
+    if (!isAutoTimeTheme) return;
+
+    const applyTimeBasedTheme = () => {
+      const hour = new Date().getHours();
+      // Nighttime: 6 PM (18) to 6 AM (6) -> Midnight Neon / Dark
+      // Daytime: 6 AM to 6 PM -> Light / Forest
+      if (hour >= 18 || hour < 6) {
+        changeTheme('neon');
+        showToast('info', '⏰ Nighttime Shift', 'Automatically switched to Midnight Neon theme for nighttime viewing.');
+      } else {
+        changeTheme('light');
+        showToast('info', '⏰ Daytime Shift', 'Automatically switched to Light theme for daytime viewing.');
+      }
+    };
+
+    applyTimeBasedTheme();
+  }, [isAutoTimeTheme]);
 
   // 5. Mock Push Notification System
   // Automatically scans registered events and triggers a simulated browser toast notification
@@ -214,6 +256,7 @@ export default function App() {
 
   // Session Handlers
   const handleLoginSuccess = (user: User) => {
+    reloadDb(); // Immediately refresh database state in React memory
     setCurrentUser(user);
     localStorage.setItem('college_portal_user_id', user.id);
     setShowAuthModal(false);
@@ -484,11 +527,12 @@ export default function App() {
                         <button
                           key={item.id}
                           onClick={() => {
+                            setIsAutoTimeTheme(false);
                             changeTheme(item.id as any);
                             setShowThemeMenu(false);
                           }}
                           className={`w-full px-3 py-2 text-left flex items-start space-x-2.5 hover:bg-slate-50 dark:hover:bg-slate-800/80 transition-colors ${
-                            theme === item.id ? 'bg-slate-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
+                            theme === item.id && !isAutoTimeTheme ? 'bg-slate-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 font-semibold' : 'text-slate-700 dark:text-slate-300'
                           }`}
                         >
                           <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 ${item.color} text-white text-[10px]`}>
@@ -500,6 +544,26 @@ export default function App() {
                           </div>
                         </button>
                       ))}
+
+                      <div className="p-2 border-t border-slate-100 dark:border-slate-800 mt-1">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setIsAutoTimeTheme(!isAutoTimeTheme);
+                            setShowThemeMenu(false);
+                          }}
+                          className={`w-full px-2.5 py-1.5 rounded-lg text-left text-[11px] font-semibold flex items-center justify-between transition-colors ${
+                            isAutoTimeTheme ? 'bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-800' : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100'
+                          }`}
+                        >
+                          <span className="flex items-center space-x-1.5">
+                            <span>⏰ Auto Time-of-Day</span>
+                          </span>
+                          <span className={`text-[9px] px-1.5 py-0.5 rounded font-bold uppercase ${isAutoTimeTheme ? 'bg-indigo-600 text-white' : 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300'}`}>
+                            {isAutoTimeTheme ? 'ON' : 'OFF'}
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </>
                 )}

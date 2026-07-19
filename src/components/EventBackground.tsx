@@ -223,7 +223,25 @@ export default function EventBackground({ activeCategory = 'all', theme = 'light
         )}
       </div>
 
-      {/* 3. Floating Event Icons */}
+      {/* 3. Abstract Geometric Patterns & Campus Building Vector Silhouettes */}
+      <div className="absolute inset-0 opacity-15 dark:opacity-10 pointer-events-none">
+        {/* Subtle Campus Building Vectors */}
+        <svg className="absolute bottom-0 left-0 w-full h-48 text-slate-400 dark:text-slate-700" viewBox="0 0 1200 200" fill="none">
+          {/* Main Auditorium & Library Vector Pillars */}
+          <path d="M 50 200 L 50 120 L 80 100 L 110 120 L 110 200 Z M 90 200 L 90 130 L 100 130 L 100 200 Z" fill="currentColor" opacity="0.4" />
+          <path d="M 200 200 L 200 90 L 320 90 L 320 200 Z M 220 110 L 250 110 L 250 200 L 220 200 Z M 270 110 L 300 110 L 300 200 L 270 200 Z" fill="currentColor" opacity="0.3" />
+          {/* Clock Tower Vector */}
+          <path d="M 550 200 L 550 40 L 570 20 L 590 40 L 590 200 Z M 560 60 Q 570 50 580 60 Q 570 70 560 60 Z" fill="currentColor" opacity="0.5" />
+          {/* Sports Complex Arch */}
+          <path d="M 850 200 C 850 100 950 100 950 200 Z" fill="currentColor" opacity="0.3" />
+        </svg>
+
+        {/* Abstract Concentric Geometric Rings */}
+        <div className="absolute -top-20 -right-20 w-96 h-96 border border-slate-300/20 dark:border-slate-700/20 rounded-full animate-spin-slow" />
+        <div className="absolute top-1/3 -left-32 w-80 h-80 border border-dashed border-indigo-500/15 rounded-full" />
+      </div>
+
+      {/* 4. Floating Event Icons */}
       <div className="absolute inset-0">
         {elements.map((item) => {
           const Icon = item.icon;
