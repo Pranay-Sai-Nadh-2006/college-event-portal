@@ -84,7 +84,7 @@ VITE_SUPABASE_ANON_KEY="your-supabase-anon-key"
 |-------|-----------|---------|
 | **Frontend Framework** | React 19 + TypeScript | Component-based UI with type safety |
 | **Build Tool** | Vite 6 | Lightning-fast HMR and bundling |
-| **Styling** | Tailwind CSS v4 | Utility-first CSS with custom theme system |
+| **Styling & Responsiveness** | Tailwind CSS v4 + Bootstrap 5 | Utility-first CSS + Bootstrap 5 responsive grid system |
 | **Cloud Database** | Supabase (`@supabase/supabase-js`) | Cloud persistence & cross-device state sync |
 | **Local Database** | localStorage (Browser) | Instant fallback & offline support |
 | **Animations** | Motion (Framer Motion) | Page transitions, toast animations, micro-interactions |
