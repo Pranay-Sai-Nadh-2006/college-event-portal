@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { User, UserRole } from '../types';
-import { getDbState, registerUser } from '../utils/db';
+import { getDbState, registerUser, recordLogin } from '../utils/db';
 import { LogIn, UserPlus, Key, Eye, EyeOff, ShieldCheck, Mail, User as UserIcon, BookOpen, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -66,6 +66,7 @@ export default function AuthModal({ onLoginSuccess, onClose, onToast }: AuthModa
         }
 
         // Successfully logged in
+        recordLogin(user.id);
         onToast('success', 'Welcome Back!', `Logged in successfully as ${user.name}`);
         onLoginSuccess(user);
       } else {
@@ -92,6 +93,7 @@ export default function AuthModal({ onLoginSuccess, onClose, onToast }: AuthModa
           return;
         }
 
+        recordLogin(registrationResult.user.id);
         onToast('success', 'Account Created!', 'Your student profile is ready. Logged in!');
         onLoginSuccess(registrationResult.user);
       }

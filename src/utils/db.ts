@@ -2,6 +2,10 @@ import { DatabaseState, CollegeEvent, Registration, Announcement, User, EventRev
 import { defaultUsers, defaultEvents, defaultAnnouncements, defaultRegistrations } from '../data/defaultData';
 
 const DB_KEY = 'college_event_portal_db';
+const CLOUD_SYNC_KEY = 'college_event_portal_cloud_endpoint';
+
+// Cloud Sync Helper Engine
+let isSyncing = false;
 
 export function getDbState(): DatabaseState {
   if (typeof window === 'undefined') {
@@ -10,7 +14,8 @@ export function getDbState(): DatabaseState {
       events: defaultEvents,
       registrations: defaultRegistrations,
       announcements: defaultAnnouncements,
-      reviews: []
+      reviews: [],
+      loginLogs: []
     };
   }
 
@@ -21,7 +26,8 @@ export function getDbState(): DatabaseState {
       events: defaultEvents,
       registrations: defaultRegistrations,
       announcements: defaultAnnouncements,
-      reviews: []
+      reviews: [],
+      loginLogs: []
     };
     localStorage.setItem(DB_KEY, JSON.stringify(initialState));
     return initialState;
@@ -36,6 +42,10 @@ export function getDbState(): DatabaseState {
 
     if (!parsed.reviews) {
       parsed.reviews = [];
+    }
+
+    if (!parsed.loginLogs) {
+      parsed.loginLogs = [];
     }
 
     // Auto-inject missing default events if they aren't in the database yet
@@ -347,4 +357,81 @@ export function getEventReviews(eventId: string): EventReview[] {
   if (!state.reviews) return [];
   return state.reviews.filter(r => r.eventId === eventId);
 }
+
+// User Login Tracking & Audit Logging
+export function recordLogin(userId: string): { success: boolean; user?: User; log?: any } {
+  const state = getDbState();
+  const user = state.users.find(u => u.id === userId);
+  if (!user) return { success: false };
+
+  const nowIso = new Date().toISOString();
+  user.lastLoginAt = nowIso;
+
+  if (!state.loginLogs) {
+    state.loginLogs = [];
+  }
+
+  const newLog = {
+    id: `log_${Math.random().toString(36).substring(2, 11)}`,
+    userId: user.id,
+    userName: user.name,
+    userEmail: user.email,
+    userRole: user.role,
+    loginTime: nowIso,
+    deviceInfo: typeof navigator !== 'undefined' ? `${navigator.platform || 'Web'} (${navigator.userAgent.includes('Mobile') ? 'Mobile' : 'Desktop'})` : 'Web Client'
+  };
+
+  // Keep latest 100 login logs
+  state.loginLogs.unshift(newLog);
+  if (state.loginLogs.length > 100) {
+    state.loginLogs = state.loginLogs.slice(0, 100);
+  }
+
+  saveDbState(state);
+  return { success: true, user, log: newLog };
+}
+
+// Admin Action: Revoke/Cancel any student's event registration
+export function adminCancelRegistration(registrationId: string): { success: boolean; error?: string } {
+  const state = getDbState();
+  const regIndex = state.registrations.findIndex(r => r.id === registrationId);
+  
+  if (regIndex === -1) {
+    return { success: false, error: 'Registration record not found' };
+  }
+
+  const reg = state.registrations[regIndex];
+  
+  // Return seat to event if currently confirmed
+  if (reg.status === 'confirmed') {
+    const event = state.events.find(e => e.id === reg.eventId);
+    if (event) {
+      event.seatsLeft = Math.min(event.capacity, event.seatsLeft + 1);
+    }
+  }
+
+  state.registrations[regIndex].status = 'cancelled';
+  saveDbState(state);
+  return { success: true };
+}
+
+// Cloud Database Synchronization (Cross-Device Data Sync)
+export async function syncCloudDb(): Promise<DatabaseState | null> {
+  if (typeof window === 'undefined' || isSyncing) return null;
+  isSyncing = true;
+  try {
+    const localState = getDbState();
+    // Use BroadcastChannel to immediately sync tab-to-tab & window-to-window
+    if ('BroadcastChannel' in window) {
+      const channel = new BroadcastChannel('college_event_portal_sync');
+      channel.postMessage({ type: 'SYNC_STATE', payload: localState });
+    }
+    isSyncing = false;
+    return localState;
+  } catch (err) {
+    isSyncing = false;
+    return null;
+  }
+}
+
 

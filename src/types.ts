@@ -12,6 +12,17 @@ export interface User {
   studentId?: string; // Roll number for students
   bio?: string;
   registeredAt: string;
+  lastLoginAt?: string;
+}
+
+export interface LoginLog {
+  id: string;
+  userId: string;
+  userName: string;
+  userEmail: string;
+  userRole: UserRole;
+  loginTime: string;
+  deviceInfo?: string;
 }
 
 export interface CollegeEvent {
@@ -76,6 +87,7 @@ export interface DatabaseState {
   registrations: Registration[];
   announcements: Announcement[];
   reviews?: EventReview[]; // Optional for backwards compatibility
+  loginLogs?: LoginLog[];
 }
 
 export interface ToastMessage {

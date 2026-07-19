@@ -72,6 +72,10 @@ export default function App() {
   // 1. Core Database State
   const [db, setDb] = useState(getDbState());
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+
+  const refreshDbState = () => {
+    setDb(getDbState());
+  };
   
   // 2. Navigation State
   const [activeTab, setActiveTab] = useState<'discover' | 'calendar' | 'announcements' | 'analytics' | 'profile' | 'admin' | 'favorites'>('discover');
@@ -922,11 +926,14 @@ export default function App() {
               events={db.events}
               announcements={db.announcements}
               registrations={db.registrations}
+              users={db.users}
+              loginLogs={db.loginLogs}
               onCreateEvent={handleCreateEvent}
               onUpdateEvent={handleUpdateEvent}
               onDeleteEvent={handleDeleteEvent}
               onCreateAnnouncement={handleCreateAnnouncement}
               onDeleteAnnouncement={handleDeleteAnnouncement}
+              onAdminCancelRegistration={refreshDbState}
               onToast={showToast}
             />
           </div>
