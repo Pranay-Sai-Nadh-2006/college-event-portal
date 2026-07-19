@@ -19,7 +19,7 @@
 - **⏰ Time-of-Day Auto Theme Shift** — Automatic day/night theme transitions (Daytime Light mode / Nighttime Midnight Neon mode)
 - **🏛️ Campus Building Vectors** — Modern background aesthetics with SVG building silhouettes (Auditorium, Library, Clock Tower, Sports Arch)
 - **📅 Event Discovery** — Search, filter by category & availability, paginated browsing
-- **🎟️ Registration & Ticketing** — One-click booking with seat tracking, QR ticket passes, Google Calendar integration
+- **🎟️ Registration & Ticketing** — One-click booking, seat tracking, downloadable PNG QR ticket passes, Google Calendar integration
 - **❤️ Favorites** — Save events for quick access with per-user persistence
 - **🤖 Smart Recommendations** — AI-powered suggestions based on department, past events, and tags
 - **📆 Interactive Calendar** — Monthly view with color-coded event dots and day agenda
@@ -157,6 +157,8 @@ erDiagram
         string role "student | admin"
         string password
         string avatarColor
+        string avatarUrl "Base64 profile photo"
+        string phone
         string department
         string studentId
         string bio
@@ -235,7 +237,7 @@ erDiagram
 
 | Collection | Key Fields | Purpose |
 |------------|-----------|---------|
-| **users** | `id`, `email`, `role`, `department`, `lastLoginAt` | User accounts with role-based access & login timestamps |
+| **users** | `id`, `email`, `role`, `avatarUrl`, `phone`, `lastLoginAt` | User accounts with profile photo, phone, role-based access & login timestamps |
 | **events** | `id`, `category`, `capacity`/`seatsLeft`, `deadline` | Campus events with real-time seat tracking |
 | **registrations** | `userId`, `eventId`, `registeredAt`, `status`, `ticketQRValue` | Booking records with registration timestamps & ticket QR |
 | **announcements** | `id`, `category`, `postedBy` | Campus-wide notice board entries |
