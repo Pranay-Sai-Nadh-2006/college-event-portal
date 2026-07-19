@@ -30,6 +30,7 @@
 - **🎨 5 Themes** — Light, Dark, Midnight Neon, Green Campus, Warm Editorial + Auto Time-of-Day
 - **🔔 Push Notifications** — Simulated event reminders with SMS/Email toggle
 - **📤 Export Tools** — ICS calendar files, PNG flyer generation, deep link sharing
+- **📱 Responsive Mobile Navigation** — Mobile-optimized navigation bar with an interactive hamburger dropdown menu ensuring clean UI on all devices
 
 ---
 

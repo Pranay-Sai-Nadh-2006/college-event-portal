@@ -34,7 +34,8 @@ import {
   Compass,
   Heart,
   CalendarPlus,
-  Check
+  Check,
+  Menu
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -95,6 +96,7 @@ export default function App() {
   const [theme, setTheme] = useState<'light' | 'dark' | 'neon' | 'forest' | 'sepia'>('light');
   const [isAutoTimeTheme, setIsAutoTimeTheme] = useState(false);
   const [showThemeMenu, setShowThemeMenu] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [isTicketCalendarAdded, setIsTicketCalendarAdded] = useState(false);
   const [deepLinkedEventId, setDeepLinkedEventId] = useState<string | null>(null);
@@ -483,7 +485,7 @@ export default function App() {
               </span>
             </div>
 
-            {/* Desktop Navigation Links */}
+            {/* Desktop Navigation Links (Hidden on small screens) */}
             <div className="hidden md:flex space-x-1.5">
               {[
                 { id: 'discover', label: 'Discover Events', icon: Compass },
@@ -511,8 +513,18 @@ export default function App() {
               })}
             </div>
 
-            {/* Right Side Tools & Session Panel */}
-            <div className="flex items-center space-x-3">
+            {/* Mobile Hamburger Button */}
+            <div className="md:hidden flex items-center">
+              <button
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                className="p-2 text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white"
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
+            </div>
+
+            {/* Right Side Tools & Session Panel (Hidden on mobile when menu is closed) */}
+            <div className="hidden md:flex items-center space-x-3">
               {/* Multi-mode Theme Menu Selector */}
               <div className="relative">
                 <button
@@ -643,8 +655,82 @@ export default function App() {
                 </button>
               )}
             </div>
-
           </div>
+          
+          {/* Mobile Navigation Menu Dropdown */}
+          {isMobileMenuOpen && (
+            <div className="md:hidden py-4 border-t border-slate-200 dark:border-slate-800 absolute top-14 left-0 w-full bg-white dark:bg-slate-900 shadow-lg px-4 flex flex-col space-y-3 z-50">
+              {[
+                { id: 'discover', label: 'Discover Events', icon: Compass },
+                { id: 'calendar', label: 'College Calendar', icon: CalendarIcon },
+                { id: 'favorites', label: 'Saved Favorites', icon: Heart },
+                { id: 'announcements', label: 'Notice Board', icon: Megaphone },
+                { id: 'analytics', label: 'Insight Charts', icon: TrendingUp }
+              ].map(tab => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => { setActiveTab(tab.id as any); setCurrentPage(1); setIsMobileMenuOpen(false); }}
+                    className={`px-4 py-2 rounded-lg text-sm font-semibold flex items-center space-x-3 transition-all ${
+                      activeTab === tab.id
+                        ? 'bg-blue-50 dark:bg-slate-850 text-blue-600 dark:text-blue-400'
+                        : 'text-slate-600 dark:text-slate-400'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+              
+              <hr className="border-slate-100 dark:border-slate-800" />
+              
+              <div className="flex items-center justify-between py-2">
+                <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Theme</span>
+                <div className="flex space-x-2">
+                  <button onClick={() => { changeTheme('light'); setIsAutoTimeTheme(false); }} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><Sun className="h-5 w-5 text-amber-500" /></button>
+                  <button onClick={() => { changeTheme('dark'); setIsAutoTimeTheme(false); }} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><Moon className="h-5 w-5 text-blue-400" /></button>
+                  <button onClick={() => { changeTheme('neon'); setIsAutoTimeTheme(false); }} className="p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800"><Sparkles className="h-5 w-5 text-pink-500" /></button>
+                </div>
+              </div>
+
+              {currentUser ? (
+                <div className="flex flex-col space-y-3 pt-2">
+                  {currentUser.role === 'admin' && (
+                    <button
+                      onClick={() => { setActiveTab('admin'); setIsMobileMenuOpen(false); }}
+                      className="px-4 py-2 rounded-lg border border-rose-200 dark:border-rose-900/40 text-rose-600 dark:text-rose-400 text-sm font-bold flex items-center justify-center space-x-2"
+                    >
+                      <ShieldCheck className="h-5 w-5" />
+                      <span>Admin Cockpit</span>
+                    </button>
+                  )}
+                  <button
+                    onClick={() => { setActiveTab('profile'); setIsMobileMenuOpen(false); }}
+                    className="px-4 py-2 rounded-lg bg-blue-50 dark:bg-slate-800 text-blue-600 dark:text-blue-400 text-sm font-bold flex items-center justify-center space-x-2"
+                  >
+                    <UserIcon className="h-5 w-5" />
+                    <span>My Profile</span>
+                  </button>
+                  <button
+                    onClick={() => { handleLogout(); setIsMobileMenuOpen(false); }}
+                    className="px-4 py-2 rounded-lg text-slate-500 hover:text-rose-500 text-sm font-bold flex items-center justify-center space-x-2"
+                  >
+                    <LogOut className="h-5 w-5" />
+                    <span>Log Out</span>
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => { setShowAuthModal(true); setIsMobileMenuOpen(false); }}
+                  className="bg-blue-600 text-white px-4 py-3 rounded-lg text-sm font-bold shadow-sm w-full"
+                >
+                  Sign In
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </nav>
 
