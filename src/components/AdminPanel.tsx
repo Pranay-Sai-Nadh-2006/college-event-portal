@@ -836,7 +836,7 @@ export default function AdminPanel({
                 <UserCheck className="h-5 w-5 text-blue-600 dark:text-blue-400" />
                 <h3 className="text-sm font-bold text-slate-900 dark:text-white">Registered Students Roster & Activity</h3>
               </div>
-              <span className="text-[10px] text-slate-400 font-medium">Auto-synced with Cloud DB</span>
+
             </div>
 
             <div className="overflow-x-auto">
