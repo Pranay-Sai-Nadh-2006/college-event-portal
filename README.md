@@ -37,7 +37,7 @@
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/<your-username>/college-event-portal.git
+git clone https://github.com/Pranay-Sai-Nadh-2006/college-event-portal.git
 cd college-event-portal
 
 # 2. Install dependencies
