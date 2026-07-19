@@ -1050,14 +1050,22 @@ export default function AdminPanel({
 
               <div>
                 <span className="text-[10px] font-bold text-slate-400 uppercase block mb-2">Event Bookings History</span>
-                <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
+                <div className="space-y-2 max-h-48 overflow-y-auto pr-1">
                   {registrations.filter(r => r.userId === selectedStudentProfile.id).map(r => (
-                    <div key={r.id} className="p-2 bg-slate-50 dark:bg-slate-800 rounded-xl flex items-center justify-between text-xs">
-                      <div>
-                        <span className="font-bold block">{r.eventTitle}</span>
-                        <span className="text-[10px] text-slate-400">{r.eventVenue} • {r.eventDate}</span>
+                    <div key={r.id} className="p-2.5 bg-slate-50 dark:bg-slate-850 rounded-xl flex items-center justify-between text-xs border border-slate-100 dark:border-slate-800">
+                      <div className="space-y-0.5">
+                        <span className="font-bold block text-slate-950 dark:text-white">{r.eventTitle}</span>
+                        <div className="flex flex-wrap items-center gap-x-2 text-[10px] text-slate-400">
+                          <span>📍 {r.eventVenue}</span>
+                          <span>•</span>
+                          <span>📅 Scheduled: {r.eventDate}</span>
+                        </div>
+                        <div className="text-[10px] font-semibold text-blue-600 dark:text-blue-400 flex items-center space-x-1 pt-0.5">
+                          <Clock className="h-3 w-3" />
+                          <span>Booked On: {new Date(r.registeredAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
+                        </div>
                       </div>
-                      <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase ${r.status === 'confirmed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'}`}>
+                      <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold uppercase shrink-0 ${r.status === 'confirmed' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300' : 'bg-rose-100 text-rose-700 dark:bg-rose-950 dark:text-rose-300'}`}>
                         {r.status}
                       </span>
                     </div>

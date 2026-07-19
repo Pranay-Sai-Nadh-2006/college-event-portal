@@ -269,9 +269,13 @@ export default function UserProfile({
                       </div>
                     </div>
                     
-                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between flex-wrap gap-2">
-                      <div className="text-[10px] text-slate-400">
+                    <div className="pt-2 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between flex-wrap gap-2 text-[10px] text-slate-400">
+                      <div>
                         Attendee: <span className="font-semibold text-slate-700 dark:text-slate-300">{user.name}</span>
+                      </div>
+                      <div className="flex items-center space-x-1 font-semibold text-blue-600 dark:text-blue-400">
+                        <Clock className="h-3 w-3" />
+                        <span>Booked On: {new Date(reg.registeredAt).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</span>
                       </div>
                       
                       <div className="flex items-center space-x-2.5">
