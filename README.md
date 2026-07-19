@@ -4,6 +4,8 @@
 
 🔗 **Live URL:** [https://college-event-portal-bice.vercel.app/](https://college-event-portal-bice.vercel.app/)
 
+⭐ **If you find this repository useful or helpful, please give it a ⭐ star on GitHub!**
+
 ---
 
 ## 📸 Features at a Glance
@@ -265,6 +267,8 @@ erDiagram
 | `npm run lint` | Run TypeScript type checking |
 
 ---
+
+⭐ **Enjoyed this project? If you found this repository useful, please consider giving it a Star on GitHub!**
 
 ## 📄 License
 
