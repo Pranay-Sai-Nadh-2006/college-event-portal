@@ -41,6 +41,7 @@ interface EventCardProps {
   onToast?: (type: 'success' | 'error' | 'info' | 'warning', title: string, message: string) => void;
   isFavorited?: boolean;
   onToggleFavorite?: (eventId: string) => void;
+  isHighlighted?: boolean;
 }
 
 export default function EventCard({
@@ -55,6 +56,7 @@ export default function EventCard({
   onToast,
   isFavorited = false,
   onToggleFavorite,
+  isHighlighted = false,
 }: EventCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);

@@ -97,6 +97,28 @@ export default function App() {
   const [showThemeMenu, setShowThemeMenu] = useState(false);
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [isTicketCalendarAdded, setIsTicketCalendarAdded] = useState(false);
+  const [deepLinkedEventId, setDeepLinkedEventId] = useState<string | null>(null);
+
+  // Handle deep-linked event from ?event=<id> URL param
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('event');
+    if (eventId) {
+      setActiveTab('discover');
+      setDeepLinkedEventId(eventId);
+      // Clean the URL without reloading
+      window.history.replaceState({}, '', window.location.pathname);
+      // Scroll to event card after a short delay for render
+      setTimeout(() => {
+        const el = document.getElementById(`event-card-${eventId}`);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          el.classList.add('ring-2', 'ring-blue-500', 'ring-offset-2');
+          setTimeout(() => el.classList.remove('ring-2', 'ring-blue-500', 'ring-offset-2'), 3000);
+        }
+      }, 600);
+    }
+  }, []);
 
   // Synchronize favorites on user session change
   useEffect(() => {
@@ -815,7 +837,7 @@ export default function App() {
             {/* Events Grid layout */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
               {paginatedEvents.map(event => (
-                <div key={event.id}>
+                <div key={event.id} id={`event-card-${event.id}`} className="transition-all duration-300 rounded-2xl">
                   <EventCard
                     event={event}
                     user={currentUser}
@@ -827,6 +849,7 @@ export default function App() {
                     onToast={showToast}
                     isFavorited={favoritedEventIds.includes(event.id)}
                     onToggleFavorite={handleToggleFavorite}
+                    isHighlighted={deepLinkedEventId === event.id}
                   />
                 </div>
               ))}
