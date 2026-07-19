@@ -369,6 +369,15 @@
             <span class="cover-badge">🎨 5 Themes</span>
         </div>
 
+        <div style="margin-top: 2.5rem; display: flex; gap: 1.5rem; justify-content: center; align-items: center; background: rgba(255,255,255,0.1); padding: 1rem 2rem; border-radius: 100px; backdrop-filter: blur(10px);">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/react/react-original.svg" alt="React" style="width: 32px; height: 32px;" title="React">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/spring/spring-original.svg" alt="Spring Boot" style="width: 32px; height: 32px;" title="Spring Boot">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" alt="MySQL" style="width: 32px; height: 32px;" title="MySQL">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg" alt="GitHub" style="width: 32px; height: 32px; filter: invert(1);" title="GitHub">
+            <img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/vercel/vercel-original.svg" alt="Vercel" style="width: 32px; height: 32px; filter: invert(1);" title="Vercel">
+            <div style="font-weight: 800; font-family: monospace; background: white; color: black; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.9rem;" title="JWT">JWT</div>
+        </div>
+
         <p class="cover-url">🔗 https://college-event-portal-bice.vercel.app</p>
     </div>
 </div>
@@ -380,63 +389,60 @@
         <h2 class="section-title">High-Level System Architecture</h2>
     </div>
     <p class="section-desc">
-        The College Event Portal is a client-side Single Page Application (SPA) built with React 19 and TypeScript. It uses a dual-storage strategy with localStorage for instant offline access and Supabase Cloud for cross-device persistence. The app is built with Vite 6 and deployed as static assets on Vercel's Edge CDN.
+        The College Event Portal is built on a modern full-stack architecture. It consists of a <strong>React</strong> frontend SPA and a robust <strong>Spring Boot</strong> REST API backend. The system utilizes <strong>MySQL</strong> for relational data storage, <strong>JWT</strong> for security, and integrates with cloud services for file storage and email notifications. The frontend is deployed via <strong>Vercel</strong> while source code is versioned on <strong>GitHub</strong>.
     </p>
 
     <div class="diagram-container">
         <pre class="mermaid">
 graph TB
-    subgraph CLIENT["🖥️ Client — Browser"]
+    subgraph USERS[" "]
         direction TB
-        UI["React 19 + TypeScript SPA"]
-        STATE["App State — useState / useEffect"]
-        LOCAL["localStorage — Offline DB"]
-        BROADCAST["BroadcastChannel API"]
+        U1["👤 Student / Admin"]
     end
 
-    subgraph BUILD["⚡ Build Toolchain"]
-        VITE["Vite 6 — Dev Server + Bundler"]
-        TS["TypeScript 5.8 Compiler"]
-        TW["Tailwind CSS v4"]
-        BS["Bootstrap 5"]
+    subgraph CLIENT["🌐 Web Browser"]
+        direction TB
+        UI["💻 Frontend (React)"]
     end
 
-    subgraph CLOUD["☁️ Cloud Services"]
-        SUPABASE["Supabase Cloud PostgreSQL"]
-        SDK["@supabase/supabase-js SDK"]
-        VERCEL["Vercel — Hosting and Edge CDN"]
+    subgraph SERVER["⚙️ Backend/API"]
+        direction TB
+        AUTH["🔒 Security (JWT)"]
+        API["⚙️ Spring Boot REST API"]
     end
 
-    UI --> STATE
-    STATE --> LOCAL
-    STATE --> SDK
-    SDK --> SUPABASE
-    LOCAL <--> BROADCAST
-    BROADCAST -->|"Cross-Tab Sync"| LOCAL
-    VITE --> UI
-    TS --> VITE
-    TW --> VITE
-    BS --> UI
-    VERCEL -->|"Serves Static SPA"| UI
+    subgraph DATA["☁️ Cloud Infrastructure"]
+        direction TB
+        DB["🗄️ MySQL Database"]
+        STORE["☁️ Cloud Storage"]
+        MAIL["📧 Email Service"]
+    end
+
+    U1 -->|"Interacts via"| CLIENT
+    UI -->|"Authenticates"| AUTH
+    AUTH -->|"Grants Access"| API
+    API <-->|"JDBC Queries"| DB
+    API -->|"Uploads/Downloads"| STORE
+    API -->|"SMTP / API"| MAIL
         </pre>
     </div>
 
     <div class="info-grid">
         <div class="info-card">
-            <h4>💾 Dual Storage Strategy</h4>
-            <p>localStorage provides instant offline access. Supabase Cloud enables cross-device data sync. BroadcastChannel handles cross-tab synchronization.</p>
+            <h4>⚙️ Backend Architecture</h4>
+            <p>Spring Boot provides a robust RESTful API layer for handling complex business logic, user management, and transactional ticketing.</p>
         </div>
         <div class="info-card accent">
-            <h4>⚡ Build Pipeline</h4>
-            <p>Vite 6 provides lightning-fast HMR in development and optimized bundling for production. TypeScript ensures compile-time type safety.</p>
+            <h4>🗄️ Data & Storage</h4>
+            <p>A relational MySQL Database ensures ACID compliance for ticket bookings, paired with scalable Cloud Storage for event media assets.</p>
         </div>
         <div class="info-card success">
-            <h4>🌐 Deployment</h4>
-            <p>Static SPA deployed on Vercel Edge CDN for global low-latency delivery. Zero server-side rendering required.</p>
+            <h4>🔒 Security First</h4>
+            <p>JWT (JSON Web Tokens) are used for stateless, secure authentication between the React frontend and the Spring Boot API.</p>
         </div>
         <div class="info-card warning">
-            <h4>🔒 Security</h4>
-            <p>Environment-based Supabase config via VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY. Role-based access control at the application layer.</p>
+            <h4>📧 Communications</h4>
+            <p>An external Email Service is integrated into the backend to automatically send QR ticket passes and event reminders.</p>
         </div>
     </div>
 
