@@ -2,7 +2,7 @@
 
 > A comprehensive, full-featured college event management and registration portal built with **React 19**, **TypeScript**, **Vite**, and **Tailwind CSS v4**. Features student & admin dashboards, event discovery, real-time seat tracking, ticket generation, campus maps, visual analytics, and 5 immersive themes.
 
-<!-- 🔗 Live URL: https://your-deployed-url.com -->
+🔗 **Live URL:** [https://college-event-portal-bice.vercel.app/](https://college-event-portal-bice.vercel.app/)
 
 ---
 
