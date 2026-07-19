@@ -1,0 +1,6 @@
+{
+  "name": "College Event Portal",
+  "description": "A comprehensive, high-fidelity college event management and registration portal featuring student/admin dashboards, event planning, visual analytics, calendar views, and seat tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

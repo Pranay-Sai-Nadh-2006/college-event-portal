@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    @apply font-sans antialiased text-slate-800 bg-slate-50 dark:text-slate-100 dark:bg-slate-950 transition-colors duration-300;
+  }
+}
+
+/* Custom sleek scrollbar design */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-slate-200 dark:bg-slate-800 rounded-full hover:bg-slate-300 dark:hover:bg-slate-700 transition-colors;
+}
+
+/* ==========================================
+   IMMERSIVE MULTI-MODE THEMES
+   ========================================== */
+
+/* 1. MIDNIGHT NEON THEME overrides */
+.theme-neon {
+  background-color: #060214 !important;
+  color: #f1f5f9 !important;
+}
+.theme-neon nav,
+.theme-neon footer,
+.theme-neon .bg-white,
+.theme-neon .dark\:bg-slate-900,
+.theme-neon .bg-slate-50,
+.theme-neon .dark\:bg-slate-850,
+.theme-neon .dark\:bg-slate-800\/50,
+.theme-neon .bg-slate-900 {
+  background-color: #0e0524 !important;
+  border-color: #271252 !important;
+  color: #f8fafc !important;
+}
+.theme-neon .text-slate-900,
+.theme-neon .text-slate-800,
+.theme-neon .text-slate-700,
+.theme-neon .dark\:text-white,
+.theme-neon .dark\:text-slate-100,
+.theme-neon h1,
+.theme-neon h2,
+.theme-neon h3,
+.theme-neon h4 {
+  color: #ffffff !important;
+}
+.theme-neon .text-slate-500,
+.theme-neon .text-slate-600,
+.theme-neon .dark\:text-slate-400 {
+  color: #a78bfa !important;
+}
+.theme-neon .border-slate-100,
+.theme-neon .border-slate-200,
+.theme-neon .dark\:border-slate-700,
+.theme-neon .dark\:border-slate-800 {
+  border-color: #271252 !important;
+}
+.theme-neon .bg-blue-600,
+.theme-neon .bg-indigo-600,
+.theme-neon .bg-indigo-500,
+.theme-neon .hover\:bg-blue-700:hover,
+.theme-neon .hover\:bg-indigo-700:hover {
+  background-color: #db2777 !important; /* Vivid Neon Pink */
+  color: #ffffff !important;
+}
+.theme-neon .text-blue-600,
+.theme-neon .text-indigo-600,
+.theme-neon .dark\:text-blue-400,
+.theme-neon .dark\:text-indigo-400 {
+  color: #22d3ee !important; /* Electric Cyan */
+}
+.theme-neon input,
+.theme-neon textarea,
+.theme-neon select {
+  background-color: #150933 !important;
+  border-color: #3b1c78 !important;
+  color: #ffffff !important;
+}
+
+/* 2. FOREST MEADOW THEME overrides */
+.theme-forest {
+  background-color: #f2f5ee !important; /* Soft, warm sage-white for reduced eye strain */
+  color: #0f2412 !important; /* Deepest pine green for high-contrast reading */
+}
+.theme-forest nav,
+.theme-forest footer,
+.theme-forest .bg-white,
+.theme-forest .dark\:bg-slate-900,
+.theme-forest .bg-slate-50,
+.theme-forest .dark\:bg-slate-850,
+.theme-forest .dark\:bg-slate-800\/50,
+.theme-forest .bg-slate-900 {
+  background-color: #e2ebda !important; /* Premium organic sage-tint */
+  border-color: #c4d4b7 !important;
+  color: #0f2412 !important;
+}
+.theme-forest .text-slate-900,
+.theme-forest .text-slate-800,
+.theme-forest .text-slate-700,
+.theme-forest .dark\:text-white,
+.theme-forest .dark\:text-slate-100,
+.theme-forest h1,
+.theme-forest h2,
+.theme-forest h3,
+.theme-forest h4 {
+  color: #0c1f0e !important; /* Deep pine-black for ultimate readability */
+}
+.theme-forest .text-slate-500,
+.theme-forest .text-slate-600,
+.theme-forest .dark\:text-slate-400 {
+  color: #344a37 !important; /* Subdued sage-moss: fully WCAG 2.1 AA compliant (contrast >5.5:1 on card backgrounds) */
+}
+.theme-forest .border-slate-100,
+.theme-forest .border-slate-200,
+.theme-forest .dark\:border-slate-700,
+.theme-forest .dark\:border-slate-800 {
+  border-color: #c4d4b7 !important;
+}
+.theme-forest .bg-blue-600,
+.theme-forest .bg-indigo-600,
+.theme-forest .bg-indigo-500,
+.theme-forest .hover\:bg-blue-700:hover,
+.theme-forest .hover\:bg-indigo-700:hover {
+  background-color: #14532d !important; /* Deepest forest green: text white contrast >8:1 */
+  color: #ffffff !important;
+}
+.theme-forest .text-blue-600,
+.theme-forest .text-indigo-600,
+.theme-forest .dark\:text-blue-400,
+.theme-forest .dark\:text-indigo-400 {
+  color: #115e2e !important; /* Rich emerald green: fully WCAG 2.1 AA compliant (contrast >5.2:1 on card backgrounds) */
+}
+.theme-forest input,
+.theme-forest textarea,
+.theme-forest select {
+  background-color: #eaf1e4 !important;
+  border-color: #b7caa3 !important;
+  color: #0c1f0e !important;
+}
+
+/* 3. SUNSET SEPIA THEME overrides */
+.theme-sepia {
+  background-color: #fbf7ee !important; /* Warm ancient cream to create cozy, nostalgic ambiance */
+  color: #281b10 !important; /* Deep roasted chicory brown for optimal contrast */
+}
+.theme-sepia nav,
+.theme-sepia footer,
+.theme-sepia .bg-white,
+.theme-sepia .dark\:bg-slate-900,
+.theme-sepia .bg-slate-50,
+.theme-sepia .dark\:bg-slate-850,
+.theme-sepia .dark\:bg-slate-800\/50,
+.theme-sepia .bg-slate-900 {
+  background-color: #f2e6d0 !important; /* Rich papyrus cream */
+  border-color: #dfd0b2 !important;
+  color: #281b10 !important;
+}
+.theme-sepia .text-slate-900,
+.theme-sepia .text-slate-800,
+.theme-sepia .text-slate-700,
+.theme-sepia .dark\:text-white,
+.theme-sepia .dark\:text-slate-100,
+.theme-sepia h1,
+.theme-sepia h2,
+.theme-sepia h3,
+.theme-sepia h4 {
+  font-family: 'Playfair Display', Georgia, serif;
+  color: #20140a !important; /* Dark roast brown for high-contrast display typography */
+}
+.theme-sepia .text-slate-500,
+.theme-sepia .text-slate-600,
+.theme-sepia .dark\:text-slate-400 {
+  color: #594331 !important; /* Warm walnut brown: fully WCAG 2.1 AA compliant (contrast >5.7:1 on card backgrounds) */
+}
+.theme-sepia .border-slate-100,
+.theme-sepia .border-slate-200,
+.theme-sepia .dark\:border-slate-700,
+.theme-sepia .dark\:border-slate-800 {
+  border-color: #dfd0b2 !important;
+}
+.theme-sepia .bg-blue-600,
+.theme-sepia .bg-indigo-600,
+.theme-sepia .bg-indigo-500,
+.theme-sepia .hover\:bg-blue-700:hover,
+.theme-sepia .hover\:bg-indigo-700:hover {
+  background-color: #7c1a1a !important; /* Cozy crimson red: white text contrast >9:1 */
+  color: #ffffff !important;
+}
+.theme-sepia .text-blue-600,
+.theme-sepia .text-indigo-600,
+.theme-sepia .dark\:text-blue-400,
+.theme-sepia .dark\:text-indigo-400 {
+  color: #8c1d1d !important; /* Rich garnet red: fully WCAG 2.1 AA compliant (contrast >4.7:1 on card backgrounds) */
+}
+.theme-sepia input,
+.theme-sepia textarea,
+.theme-sepia select {
+  background-color: #faf6eb !important;
+  border-color: #dfd0b2 !important;
+  color: #20140a !important;
+}
+
+
