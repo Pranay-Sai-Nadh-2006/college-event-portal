@@ -964,31 +964,41 @@ export default function AdminPanel({
               <h4 className="text-xs font-bold text-slate-900 dark:text-white uppercase tracking-wider">Recent Login Audit Logs</h4>
             </div>
 
-            <div className="max-h-60 overflow-y-auto pr-1">
-              <div className="space-y-2">
-                {loginLogs.map(log => (
-                  <div key={log.id} className="p-2.5 bg-slate-50 dark:bg-slate-850 rounded-xl flex items-center justify-between text-xs">
-                    <div className="flex items-center space-x-2">
-                      <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${log.userRole === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300'}`}>
-                        {log.userRole}
-                      </span>
-                      <span className="font-bold text-slate-900 dark:text-white">{log.userName}</span>
-                      <span className="text-slate-400 font-mono text-[10px]">({log.userEmail})</span>
-                    </div>
-
-                    <div className="flex items-center space-x-3 text-[10px] text-slate-500">
-                      <span>{log.deviceInfo || 'Web App'}</span>
-                      <span className="font-semibold text-blue-600 dark:text-blue-400">
-                        {new Date(log.loginTime).toLocaleString()}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-
-                {loginLogs.length === 0 && (
-                  <p className="text-xs text-slate-400 italic text-center py-4">No login logs recorded yet.</p>
-                )}
-              </div>
+            <div className="max-h-60 overflow-x-auto overflow-y-auto pr-1">
+              {loginLogs.length === 0 ? (
+                <p className="text-xs text-slate-400 italic text-center py-4">No login logs recorded yet.</p>
+              ) : (
+                <table className="w-full text-left text-xs whitespace-nowrap">
+                  <thead className="bg-slate-50 dark:bg-slate-800 text-slate-500 dark:text-slate-400 sticky top-0">
+                    <tr>
+                      <th className="px-3 py-2 font-bold uppercase tracking-wider rounded-tl-lg">S.No</th>
+                      <th className="px-3 py-2 font-bold uppercase tracking-wider">Role</th>
+                      <th className="px-3 py-2 font-bold uppercase tracking-wider">Name</th>
+                      <th className="px-3 py-2 font-bold uppercase tracking-wider">Mail ID</th>
+                      <th className="px-3 py-2 font-bold uppercase tracking-wider">Device Type</th>
+                      <th className="px-3 py-2 font-bold uppercase tracking-wider rounded-tr-lg">Date & Time</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100 dark:divide-slate-800/50">
+                    {loginLogs.map((log, index) => (
+                      <tr key={log.id} className="hover:bg-slate-50 dark:hover:bg-slate-850/50 transition-colors">
+                        <td className="px-3 py-2.5 font-mono text-[10px] text-slate-500">{index + 1}</td>
+                        <td className="px-3 py-2.5">
+                          <span className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${log.userRole === 'admin' ? 'bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300' : 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300'}`}>
+                            {log.userRole}
+                          </span>
+                        </td>
+                        <td className="px-3 py-2.5 font-bold text-slate-900 dark:text-white">{log.userName}</td>
+                        <td className="px-3 py-2.5 text-slate-500 font-mono text-[10px]">{log.userEmail}</td>
+                        <td className="px-3 py-2.5 text-slate-500">{log.deviceInfo || 'Web App'}</td>
+                        <td className="px-3 py-2.5 font-semibold text-blue-600 dark:text-blue-400">
+                          {new Date(log.loginTime).toLocaleString()}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>
